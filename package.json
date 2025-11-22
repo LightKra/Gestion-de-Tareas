@@ -1,0 +1,24 @@
+{
+  "name": "gestion-de-tareas",
+  "version": "1.0.0",
+  "description": "aplicación de gestión de tareas",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "docker-compose up -d",
+    "stop": "docker-compose down --rmi all --volumes",
+    "logs": "docker-compose logs -f",
+    "install-dependencies": "cd backend && npm install && cd ../frontend && npm install",
+    "db:generate": "docker-compose exec backend npm run db:generate",
+    "db:push": "docker-compose exec backend npm run db:push"
+  },
+  "keywords": [
+    "gestion",
+    "tareas",
+    "backend",
+    "frontend",
+    "docker",
+    "compose"
+  ],
+  "author": "Michael Alava",
+  "license": "ISC"
+}
