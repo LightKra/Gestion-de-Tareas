@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /* eslint-disable */
-// Script para ejecutar drizzle-kit push con configuración SSL apropiada
+// Script para ejecutar drizzle-kit push/migrate con configuración SSL apropiada
 // Detectar si es una conexión local y configurar SSL en consecuencia
 const dbUrl = process.env.DATABASE_URL || "";
 const isLocal = dbUrl.includes("localhost") || dbUrl.includes("127.0.0.1");
+const isProduction = process.env.NODE_ENV === "production";
 
 if (isLocal) {
   // Para conexiones locales, deshabilitar SSL completamente
@@ -15,7 +16,7 @@ if (isLocal) {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }
 
-// Importar y ejecutar drizzle-kit push
+// Importar y ejecutar drizzle-kit
 const { execSync } = require("child_process");
 
 try {
@@ -27,7 +28,10 @@ try {
     env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
 
-  execSync("drizzle-kit push", {
+  // En producción, usar migraciones; en desarrollo, usar push
+  const command = isProduction ? "drizzle-kit migrate" : "drizzle-kit push";
+
+  execSync(command, {
     stdio: "inherit",
     env,
   });
