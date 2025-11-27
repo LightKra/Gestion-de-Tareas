@@ -30,12 +30,14 @@ app.get("/health", (_req: Request, res: Response) => {
   });
 });
 
+console.log("Valor de process.env.PORT:", process.env.PORT);
+console.log("Valor final de PORT:", PORT);
 // Rutas de la API
 app.use("/api", apiRoutes);
 
 // Iniciar servidor
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
 export default app;
