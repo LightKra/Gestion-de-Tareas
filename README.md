@@ -154,8 +154,10 @@ Presiona `Ctrl + C` para salir de los logs.
 
 ## 📝 Comandos Útiles
 
+### Desarrollo
+
 ```bash
-# Iniciar la aplicación
+# Iniciar la aplicación en modo desarrollo
 npm run start
 
 # Detener la aplicación
@@ -167,18 +169,42 @@ npm run logs
 # Crear/actualizar tablas de base de datos
 npm run db:push
 
-# Abrir interfaz visual de la base de datos (opcional)
-npm run db:studio
+# Generar migraciones de base de datos
+npm run db:generate
+```
+
+### Producción
+
+```bash
+# Construir las imágenes de producción
+npm run build:prod
+
+# Iniciar la aplicación en modo producción
+npm run start:prod
+
+# Detener la aplicación de producción
+npm run stop:prod
+
+# Ver logs de producción
+npm run logs:prod
 ```
 
 ## 🏗️ Estructura del Proyecto
 
 ```
 Gestion De Tareas/
-├── backend/          # Servidor API (Express + TypeScript)
-├── frontend/         # Interfaz web (React + TypeScript)
-├── docker-compose.yml # Configuración de Docker
-└── package.json      # Scripts del proyecto
+├── backend/                    # Servidor API (Express + TypeScript)
+│   ├── Dockerfile              # Dockerfile para desarrollo
+│   ├── Dockerfile.prod         # Dockerfile para producción
+│   └── src/                    # Código fuente del backend
+├── frontend/                   # Interfaz web (React + TypeScript)
+│   ├── Dockerfile              # Dockerfile para desarrollo
+│   ├── Dockerfile.prod         # Dockerfile para producción
+│   ├── nginx.conf              # Configuración de nginx para producción
+│   └── src/                    # Código fuente del frontend
+├── docker-compose.yml          # Configuración de Docker para desarrollo
+├── docker-compose.prod.yml     # Configuración de Docker para producción
+└── package.json                # Scripts del proyecto
 ```
 
 ## 🛠️ Tecnologías Utilizadas
@@ -187,6 +213,72 @@ Gestion De Tareas/
 - **Backend:** Express, TypeScript, SQLite
 - **Base de Datos:** SQLite con Drizzle ORM
 - **Contenedores:** Docker y Docker Compose
+- **Servidor Web (Producción):** Nginx
+
+## 🚀 Despliegue en Producción
+
+### Diferencias entre Desarrollo y Producción
+
+**Modo Desarrollo:**
+- Hot reload activado (cambios se reflejan automáticamente)
+- Código fuente montado como volúmenes
+- Servidor de desarrollo de Vite en puerto 5173
+- Variables de entorno de desarrollo
+
+**Modo Producción:**
+- Código compilado y optimizado dentro de las imágenes Docker
+- Frontend servido por nginx en puerto 80
+- Backend compilado con TypeScript
+- Imágenes multi-stage para reducir tamaño
+- Sin volúmenes de código fuente
+- Configuración de logging y restart policies optimizadas
+
+### Pasos para Desplegar en Producción
+
+1. **Construir las imágenes de producción:**
+   ```bash
+   npm run build:prod
+   ```
+
+2. **Iniciar los servicios:**
+   ```bash
+   npm run start:prod
+   ```
+
+3. **Configurar la base de datos:**
+   ```bash
+   docker-compose -f docker-compose.prod.yml exec backend npm run db:push
+   ```
+
+4. **Acceder a la aplicación:**
+   - Frontend: http://localhost (puerto 80)
+   - Backend API: http://localhost:3000
+
+### Configuración de Variables de Entorno en Producción
+
+Si necesitas cambiar la URL de la API del frontend, edita el archivo `docker-compose.prod.yml` y modifica el argumento `VITE_API_URL` en la sección del frontend:
+
+```yaml
+frontend:
+  build:
+    args:
+      - VITE_API_URL=http://tu-servidor-backend:3000
+```
+
+Luego reconstruye las imágenes:
+```bash
+npm run build:prod
+```
+
+### Persistencia de Base de Datos en Producción
+
+Por defecto, la base de datos se guarda dentro del contenedor. Para persistir los datos en el host, agrega un volumen en `docker-compose.prod.yml`:
+
+```yaml
+backend:
+  volumes:
+    - ./backend/database.db:/app/database.db
+```
 
 ## 📝 Notas para Desarrolladores
 
@@ -194,9 +286,10 @@ Si necesitas trabajar en el código:
 
 - El código del frontend está en `frontend/src/`
 - El código del backend está en `backend/src/`
-- Los cambios en el código se reflejan automáticamente gracias al hot reload
+- Los cambios en el código se reflejan automáticamente gracias al hot reload (solo en desarrollo)
 - La base de datos se guarda en `backend/database.db`
 - Para instalar dependencias manualmente: `npm run install-dependencies`
+- Usa `docker-compose.yml` para desarrollo y `docker-compose.prod.yml` para producción
 
 ## 👤 Autor
 

@@ -1,6 +1,6 @@
 import { db } from "../db/index";
-import { tasks, lists, type Task, type NewTask } from "../db/schema";
-import { eq, and, or, isNull, isNotNull, desc, asc } from "drizzle-orm";
+import { tasks, type Task, type NewTask } from "../db/schema";
+import { eq, isNull } from "drizzle-orm";
 
 export class TasksService {
   // Obtener todas las tareas

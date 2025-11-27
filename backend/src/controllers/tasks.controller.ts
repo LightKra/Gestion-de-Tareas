@@ -56,7 +56,7 @@ export async function getByListId(req: Request, res: Response): Promise<void> {
 }
 
 // GET /api/tasks/without-list - Obtener tareas sin lista
-export async function getWithoutList(req: Request, res: Response): Promise<void> {
+export async function getWithoutList(_req: Request, res: Response): Promise<void> {
   try {
     const tasks = await tasksService.getWithoutList();
     res.json(tasks);
@@ -66,7 +66,7 @@ export async function getWithoutList(req: Request, res: Response): Promise<void>
 }
 
 // GET /api/tasks/completed - Obtener tareas completadas
-export async function getCompleted(req: Request, res: Response): Promise<void> {
+export async function getCompleted(_req: Request, res: Response): Promise<void> {
   try {
     const tasks = await tasksService.getCompleted();
     res.json(tasks);
@@ -76,7 +76,7 @@ export async function getCompleted(req: Request, res: Response): Promise<void> {
 }
 
 // GET /api/tasks/pending - Obtener tareas pendientes
-export async function getPending(req: Request, res: Response): Promise<void> {
+export async function getPending(_req: Request, res: Response): Promise<void> {
   try {
     const tasks = await tasksService.getPending();
     res.json(tasks);

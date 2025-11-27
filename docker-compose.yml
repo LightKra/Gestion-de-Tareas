@@ -13,9 +13,9 @@ services:
       - CHOKIDAR_INTERVAL=1000
     volumes:
       # Montar el código fuente para desarrollo (hot reload)
-      - ./backend/src:/app/src:rw
-      - ./backend/tsconfig.json:/app/tsconfig.json:ro
-      - ./backend/nodemon.json:/app/nodemon.json:ro
+      - "./backend/src:/app/src:rw"
+      - "./backend/tsconfig.json:/app/tsconfig.json:ro"
+      - "./backend/nodemon.json:/app/nodemon.json:ro"
       - /app/node_modules
     networks:
       - gestion-tareas-network
@@ -44,16 +44,16 @@ services:
       - "5173:5173"
     environment:
       - NODE_ENV=development
-      - VITE_API_URL=http://localhost:3000 
+      - VITE_API_URL=http://localhost:3000
     volumes:
       # Montar el código fuente para desarrollo (hot reload)
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
-      - ./frontend/index.html:/app/index.html
-      - ./frontend/vite.config.ts:/app/vite.config.ts
-      - ./frontend/tsconfig.json:/app/tsconfig.json
-      - ./frontend/tsconfig.app.json:/app/tsconfig.app.json
-      - ./frontend/tsconfig.node.json:/app/tsconfig.node.json
+      - "./frontend/src:/app/src"
+      - "./frontend/public:/app/public"
+      - "./frontend/index.html:/app/index.html"
+      - "./frontend/vite.config.ts:/app/vite.config.ts"
+      - "./frontend/tsconfig.json:/app/tsconfig.json"
+      - "./frontend/tsconfig.app.json:/app/tsconfig.app.json"
+      - "./frontend/tsconfig.node.json:/app/tsconfig.node.json"
       - /app/node_modules
     networks:
       - gestion-tareas-network
