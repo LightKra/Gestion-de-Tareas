@@ -1,33 +1,25 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 
 // Tabla de listas
-export const lists = sqliteTable("lists", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  name: text("name", { length: 150 }).notNull(),
-  color: text("color", { length: 20 }), // Indicador de color opcional
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
+export const lists = pgTable("lists", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  name: text("name").notNull(),
+  color: text("color"), // Indicador de color opcional
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 // Tabla de tareas
-export const tasks = sqliteTable("tasks", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const tasks = pgTable("tasks", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   listId: integer("list_id").references(() => lists.id, { onDelete: "set null" }), // Las tareas pueden no tener lista
-  title: text("title", { length: 300 }).notNull(),
+  title: text("title").notNull(),
   description: text("description"),
-  dueDate: integer("due_date", { mode: "timestamp" }), // para "Mi día", "Próximos 7 días" y el calendario
-  isCompleted: integer("is_completed", { mode: "boolean" }).notNull().default(false),
+  dueDate: timestamp("due_date"), // para "Mi día", "Próximos 7 días" y el calendario
+  isCompleted: boolean("is_completed").notNull().default(false),
   priority: integer("priority").notNull(), // 1 = alta, 2 = media, 3 = baja
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 // Tipos TypeScript para las tablas

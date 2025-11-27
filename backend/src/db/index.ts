@@ -1,15 +1,14 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
-import path from "path";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import * as schema from "./schema";
 
-// Crear conexión a la base de datos SQLite
-// Ruta absoluta: siempre apunta a backend/database.db independientemente del CWD
-const dbPath = path.join(__dirname, "../../database.db");
-const sqlite = new Database(dbPath);
+// Crear conexión a PostgreSQL usando DATABASE_URL
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
 // Crear instancia de Drizzle con el esquema
-export const db = drizzle(sqlite, { schema });
+export const db = drizzle(pool, { schema });
 
 // Exportar el esquema para uso en otras partes de la aplicación
 export { schema };
