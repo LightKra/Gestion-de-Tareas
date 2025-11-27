@@ -28,13 +28,29 @@ try {
     env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
 
-  // En producción, usar migraciones; en desarrollo, usar push
-  const command = isProduction ? "drizzle-kit migrate" : "drizzle-kit push";
+  // En producción, usar el script alternativo que ejecuta SQL directamente
+  // En desarrollo, usar drizzle-kit push que es más rápido
+  if (isProduction) {
+    console.log("Usando script de migraciones SQL (producción)");
+    execSync("node scripts/db-migrate.js", {
+      stdio: "inherit",
+      env,
+      cwd: process.cwd(),
+    });
+  } else {
+    console.log("Usando drizzle-kit push (desarrollo)");
+    const command = "drizzle-kit push";
+    console.log(`Ejecutando: ${command}`);
+    console.log(`SSL Mode: ${isLocal ? "disable" : "no-verify"}`);
 
-  execSync(command, {
-    stdio: "inherit",
-    env,
-  });
-} catch {
+    execSync(command, {
+      stdio: "inherit",
+      env,
+      cwd: process.cwd(),
+    });
+    console.log("✓ Migración completada exitosamente");
+  }
+} catch (error) {
+  console.error("✗ Error fatal en el script de migración:", error.message);
   process.exit(1);
 }
