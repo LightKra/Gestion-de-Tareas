@@ -31,10 +31,5 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 
-# Database
-database.db
-database.db-journal
 
-# Drizzle migrations
-drizzle/
 
