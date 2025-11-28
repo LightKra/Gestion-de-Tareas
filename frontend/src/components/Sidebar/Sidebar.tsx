@@ -116,7 +116,7 @@ const Sidebar = () => {
 
       {/* User Profile */}
       <div className="p-4 border-t border-gray-800">
-        <UserProfile name="Roger" email="roger@untitledui.com" avatarUrl="" />
+        <UserProfile name="Roger" email="xxxxxxxx.com" avatarUrl="" />
       </div>
 
       {/* Create List Modal */}
